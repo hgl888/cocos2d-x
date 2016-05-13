@@ -216,7 +216,7 @@ var GLClearTest = OpenGLTestLayer.extend({
         return "gl.clear(gl.COLOR_BUFFER_BIT)";
     },
     subtitle:function () {
-        return "Testing gl.clear() with cc.GLNode";
+        return "Testing gl.clear() with cc.GLNode\n The layer should be in black";
     },
 
     //
@@ -458,7 +458,8 @@ var GLNodeCCAPITest = OpenGLTestLayer.extend({
 
                 this.shader.use();
                 this.shader.setUniformsForBuiltins();
-                cc.glEnableVertexAttribs( cc.VERTEX_ATTRIB_FLAG_COLOR | cc.VERTEX_ATTRIB_FLAG_POSITION);
+                gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_COLOR);
+                gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
 
                 // Draw fullscreen Square
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.squareVertexPositionBuffer);
@@ -604,7 +605,7 @@ var ShaderNode = cc.GLNode.extend({
         this.shader.setUniformLocationF32( this.uniformCenter, centerx, centery);
         this.shader.setUniformLocationF32( this.uniformResolution, 256, 256);
 
-        cc.glEnableVertexAttribs( cc.VERTEX_ATTRIB_FLAG_POSITION );
+        gl.enableVertexAttribArray( cc.VERTEX_ATTRIB_POSITION );
 
         // Draw fullscreen Square
         gl.bindBuffer(gl.ARRAY_BUFFER, this.squareVertexPositionBuffer);
@@ -905,7 +906,7 @@ var ShaderOutlineEffect = OpenGLTestLayer.extend({
             }else{
                 this.sprite.shaderProgram = this.shader;
             }
-                                     
+
             this.addChild(this.sprite);
 
             this.scheduleUpdate();
@@ -1034,7 +1035,7 @@ var GLGetActiveTest = OpenGLTestLayer.extend({
     },
 
     title:function () {
-        return "gl.getActive***";
+        return "gl.getActiveXXX Function Test";
     },
     subtitle:function () {
         return "Tests gl.getActiveUniform / getActiveAttrib. See console";
@@ -1088,7 +1089,8 @@ var TexImage2DTest = OpenGLTestLayer.extend({
                 this.shader.setUniformsForBuiltins();
 
                 gl.bindTexture(gl.TEXTURE_2D, this.my_texture);
-                cc.glEnableVertexAttribs( cc.VERTEX_ATTRIB_FLAG_TEX_COORDS | cc.VERTEX_ATTRIB_FLAG_POSITION);
+                gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
+                gl.enableVertexAttribArray(cc.VERTEX_ATTRIB_TEX_COORDS);
 
                 // Draw fullscreen Square
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.squareVertexPositionBuffer);
@@ -1224,6 +1226,7 @@ var GLTexParamterTest = OpenGLTestLayer.extend({
 
         if( 'opengl' in cc.sys.capabilities ) {
             if( ! autoTestEnabled ) {
+                cc.log( "[Max, MIN, WRAP_S, WRAP_T]" );
                 cc.log( this.getTexValues() );
             }
         }
@@ -1233,7 +1236,7 @@ var GLTexParamterTest = OpenGLTestLayer.extend({
         return "GLTexParamterTest";
     },
     subtitle:function () {
-        return "tests texParameter()";
+        return "tests texParameter()\n See the Console";
     },
     getTexValues:function() {
         if(!cc.sys.isNative){
@@ -1250,7 +1253,7 @@ var GLTexParamterTest = OpenGLTestLayer.extend({
         var mag = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER);
         var min = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER);
         var w_s = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S);
-        var w_t = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S);
+        var w_t = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T);
 
         var a = [mag, min, w_s, w_t];
         return a;
@@ -1293,7 +1296,7 @@ var GLGetUniformTest = OpenGLTestLayer.extend({
         return "GLGetUniformTest";
     },
     subtitle:function () {
-        return "tests texParameter()";
+        return "tests texParameter()\n See the Console";
     },
     runTest:function() {
 

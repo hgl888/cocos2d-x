@@ -24,12 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "HttpClient.h"
+#include "platform/CCPlatformConfig.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+#include "network/HttpClient.h"
 
 #include <queue>
 #include <errno.h>
 
-#import "network/HttpAsynConnection.h"
+#import "network/HttpAsynConnection-apple.h"
 #include "network/HttpCookie.h"
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
@@ -167,12 +170,7 @@ static int processTask(HttpClient* client, HttpRequest* request, NSString* reque
 
     //if request type is post or put,set header and data
     if([requestType  isEqual: @"POST"] || [requestType isEqual: @"PUT"])
-    {
-        if ([requestType isEqual: @"PUT"])
-        {
-            [nsrequest setValue: @"application/x-www-form-urlencoded" forHTTPHeaderField: @"Content-Type"];
-        }
-        
+    {   
         char* requestDataBuffer = request->getRequestData();
         if (nullptr !=  requestDataBuffer && 0 != request->getRequestDataSize())
         {
@@ -181,7 +179,7 @@ static int processTask(HttpClient* client, HttpRequest* request, NSString* reque
         }
     }
 
-    //read cookie propertities from file and set cookie
+    //read cookie properties from file and set cookie
     std::string cookieFilename = client->getCookieFilename();
     if(!cookieFilename.empty() && nullptr != client->getCookie())
     {
@@ -601,5 +599,8 @@ const std::string& HttpClient::getSSLVerification()
 }
 
 NS_CC_END
+
+#endif // #if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+
 
 

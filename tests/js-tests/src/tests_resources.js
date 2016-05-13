@@ -2,9 +2,19 @@
 var s_resprefix = "";
 
 var ccbjs = "";
+// js-test use cpptest resource in debug mode , and in the release mode, console will copy the resource into the res dir
+// so the respath will modify to res,
 if (!cc.sys.isNative)
 {
-    ccbjs = "../../js-tests/resjs/";
+    cc.game._loadConfig();
+    if (cc.game.config[cc.game.CONFIG_KEY.engineDir] !== "frameworks/cocos2d-html5") {
+        ccbjs = "../../js-tests/resjs/";
+    }
+    else
+    {
+        ccbjs = "";
+    }
+
 }
 
 var s_pathGrossini = "Images/grossini.png";
@@ -227,6 +237,7 @@ var g_resources = [
     s_pathF1,
     s_pathF2,
     s_pathBlock,
+    s_back2,
     s_back3,
     s_fire,
     s_pathClose,
@@ -314,7 +325,6 @@ var g_touches = [
 var g_s9s_blocks = [
     s_s9s_blocks9_plist,
     s_s9s_blocks9,
-    s_blocks9,
     s_s9s_ui,
     s_s9s_ui_plist
 ];
@@ -390,8 +400,7 @@ var g_label = [
 ];
 
 var g_transitions = [
-    s_back1,
-    s_back2
+    s_back1
 ];
 
 var g_box2d = [
@@ -765,8 +774,6 @@ var g_cocoStudio = [
     "ccs-res/cocosui/UIEditorTest/UIScrollView/Vertical/selected01.png",
     "ccs-res/cocosui/UIEditorTest/UIScrollView/Vertical/selected02.png",
     "ccs-res/cocosui/UIEditorTest/UIScrollView/Vertical/vertical_1.json",
-    "ccs-res/cocosui/UIEditorTest/UISlider/2014-1-26 11-42-09.png",
-    "ccs-res/cocosui/UIEditorTest/UISlider/2014-1-26 11-43-52.png",
     "ccs-res/cocosui/UIEditorTest/UISlider/background.png",
     "ccs-res/cocosui/UIEditorTest/UISlider/buttonBackground.png",
     "ccs-res/cocosui/UIEditorTest/UISlider/ribbon.png",
@@ -888,8 +895,6 @@ var g_cocoStudio = [
     "ccs-res/cocosui/UIEditorTest/2.1/plist1/Plist.plist",
     "ccs-res/cocosui/UIEditorTest/2.1/Plist/ui.plist",
     "ccs-res/cocosui/UIEditorTest/2.1/LoadingBar/pipe2.png",
-    "ccs-res/cocosui/UIEditorTest/2.1/Slider/2013-8-13 15-44-11.png",
-    "ccs-res/cocosui/UIEditorTest/2.1/Slider/teehanlax - iOS 6 - iPhone_slider01.png",
     "ccs-res/cocosui/UIEditorTest/2.1/particle/blue.plist",
     "ccs-res/cocosui/UIEditorTest/2.1/Default/Slider_Back.png",
     "ccs-res/cocosui/UIEditorTest/2.1/Default/SliderNode_Normal.png",

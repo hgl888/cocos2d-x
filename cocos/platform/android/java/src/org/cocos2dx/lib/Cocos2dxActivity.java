@@ -23,30 +23,31 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLDisplay;
-
-import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
-import com.chukong.cocosplay.client.CocosPlayClient;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager.OnActivityResultListener;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
     // ===========================================================
@@ -65,6 +66,12 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     private static Cocos2dxActivity sContext = null;
     private Cocos2dxVideoHelper mVideoHelper = null;
     private Cocos2dxWebViewHelper mWebViewHelper = null;
+    private Cocos2dxEditBoxHelper mEditBoxHelper = null;
+    private boolean hasFocus = false;
+
+    public Cocos2dxGLSurfaceView getGLSurfaceView(){
+        return  mGLSurfaceView;
+    }
 
     public class Cocos2dxEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
     {
@@ -169,8 +176,9 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
             };
             EGLConfig[] configs = new EGLConfig[1];
             int[] numConfigs = new int[1];
-
-            if (egl.eglChooseConfig(display, EGLattribs, configs, 1, numConfigs)) {
+            boolean eglChooseResult = egl.eglChooseConfig(display, EGLattribs, configs, 1, numConfigs);
+            if (eglChooseResult && numConfigs[0] > 0)
+            {
                 return configs[0];
             }
 
@@ -179,8 +187,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
                     EGL10.EGL_RENDERABLE_TYPE, 4, //EGL_OPENGL_ES2_BIT
                     EGL10.EGL_NONE
             };
-
-            if(egl.eglChooseConfig(display, EGLV2attribs, null, 0, numConfigs)) {
+            eglChooseResult = egl.eglChooseConfig(display, EGLV2attribs, null, 0, numConfigs);
+            if(eglChooseResult && numConfigs[0] > 0) {
                 int num = numConfigs[0];
                 ConfigValue[] cfgVals = new ConfigValue[num];
 
@@ -249,7 +257,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CocosPlayClient.init(this, false);
 
         onLoadNativeLibraries();
 
@@ -268,6 +275,15 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         if(mWebViewHelper == null){
             mWebViewHelper = new Cocos2dxWebViewHelper(mFrameLayout);
         }
+
+        if(mEditBoxHelper == null){
+            mEditBoxHelper = new Cocos2dxEditBoxHelper(mFrameLayout);
+        }
+
+        Window window = this.getWindow();
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     //native method,call GLViewImpl::getGLContextAttrs() to get the OpenGL ES context attributions
@@ -283,21 +299,30 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 
     @Override
     protected void onResume() {
+    	Log.d(TAG, "onResume()");
         super.onResume();
+       	resumeIfHasFocus();
     }
     
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+    	Log.d(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
         
-        if (hasFocus) {
-            Cocos2dxHelper.onResume();
-            mGLSurfaceView.onResume();
+        this.hasFocus = hasFocus;
+        resumeIfHasFocus();
+    }
+    
+    private void resumeIfHasFocus() {
+        if(hasFocus) {
+        	Cocos2dxHelper.onResume();
+        	mGLSurfaceView.onResume();
         }
     }
 
     @Override
     protected void onPause() {
+    	Log.d(TAG, "onPause()");
         super.onPause();
         Cocos2dxHelper.onPause();
         mGLSurfaceView.onPause();
@@ -313,14 +338,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         Message msg = new Message();
         msg.what = Cocos2dxHandler.HANDLER_SHOW_DIALOG;
         msg.obj = new Cocos2dxHandler.DialogMessage(pTitle, pMessage);
-        this.mHandler.sendMessage(msg);
-    }
-
-    @Override
-    public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) { 
-        Message msg = new Message();
-        msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
-        msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
         this.mHandler.sendMessage(msg);
     }
     
@@ -340,7 +357,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     }
 
 
-    protected FrameLayout mFrameLayout = null;
+    protected ResizeLayout mFrameLayout = null;
     // ===========================================================
     // Methods
     // ===========================================================
@@ -350,17 +367,19 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         ViewGroup.LayoutParams framelayout_params =
             new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                        ViewGroup.LayoutParams.MATCH_PARENT);
-        mFrameLayout = new FrameLayout(this);
+
+        mFrameLayout = new ResizeLayout(this);
+
         mFrameLayout.setLayoutParams(framelayout_params);
 
         // Cocos2dxEditText layout
         ViewGroup.LayoutParams edittext_layout_params =
             new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                        ViewGroup.LayoutParams.WRAP_CONTENT);
-        Cocos2dxEditText edittext = new Cocos2dxEditText(this);
+        Cocos2dxEditBox edittext = new Cocos2dxEditBox(this);
         edittext.setLayoutParams(edittext_layout_params);
 
-        // ...add to FrameLayout
+
         mFrameLayout.addView(edittext);
 
         // Cocos2dxGLSurfaceView
@@ -379,6 +398,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         // Set framelayout as the content view
         setContentView(mFrameLayout);
     }
+
     
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);

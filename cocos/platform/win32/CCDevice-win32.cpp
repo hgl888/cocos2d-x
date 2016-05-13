@@ -113,9 +113,7 @@ public:
             if (fontName.c_str())
             {
                 // create font from ttf file
-                int nFindttf = fontName.find(".ttf");
-                int nFindTTF = fontName.find(".TTF");
-                if (nFindttf >= 0 || nFindTTF >= 0)
+                if (FileUtils::getInstance()->getFileExtension(fontName) == ".ttf")
                 {
                     fontPath = FileUtils::getInstance()->fullPathForFilename(fontName.c_str());
                     int nFindPos = fontName.rfind("/");
@@ -466,7 +464,7 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
         width    = (short)size.cx;
         height   = (short)size.cy;
 
-        // copy pixed data
+        // copy pixel data
         bi.bmiHeader.biHeight = (bi.bmiHeader.biHeight > 0)
             ? - bi.bmiHeader.biHeight : bi.bmiHeader.biHeight;
         GetDIBits(dc.getDC(), dc.getBitmap(), 0, height, dataBuf,

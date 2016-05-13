@@ -24,7 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "HttpClient.h"
+#include "platform/CCPlatformConfig.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+#include "network/HttpClient.h"
 
 #include <queue>
 #include <sstream>
@@ -1050,4 +1053,4 @@ const std::string& HttpClient::getSSLVerification()
 
 NS_CC_END
 
-
+#endif // #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

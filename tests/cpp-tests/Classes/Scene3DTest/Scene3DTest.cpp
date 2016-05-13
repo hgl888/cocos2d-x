@@ -249,7 +249,7 @@ bool Scene3DTestScene::init()
         ca = _gameCameras[CAMERA_WORLD_3D_SCENE] =
             Camera::createPerspective(60,
                                       visibleSize.width/visibleSize.height,
-                                      0.1,
+                                      0.1f,
                                       200);
         ca->setDepth(CAMERA_WORLD_3D_SCENE);
         ca->setName(s_CameraNames[CAMERA_WORLD_3D_SCENE]);
@@ -401,7 +401,7 @@ void Scene3DTestScene::createWorld3D()
     _player = Player::create("Sprite3DTest/girl.c3b",
                              _gameCameras[CAMERA_WORLD_3D_SCENE],
                              _terrain);
-    _player->setScale(0.08);
+    _player->setScale(0.08f);
     _player->setPositionY(_terrain->getHeight(_player->getPositionX(),
                                               _player->getPositionZ()));
     
@@ -494,7 +494,7 @@ void Scene3DTestScene::createUI()
         cb->setSelected(true);
         if (text) cb->setName(text);
         cb->setAnchorPoint(Vec2(0, 0.5));
-        cb->setScale(0.8);
+        cb->setScale(0.8f);
         cb->addClickEventListener([this](Ref* sender)
             {
                 auto index = static_cast<Node *>(sender)->getTag();
@@ -643,6 +643,7 @@ void Scene3DTestScene::createDetailDlg()
     float margin = 10;
     
     // create dialog
+    // use Scale9Sprite as background, it won't swallow touch event
     _detailDlg = ui::Scale9Sprite::createWithSpriteFrameName("button_actived.png");
     _detailDlg->setContentSize(dlgSize);
     _detailDlg->setAnchorPoint(Vec2(0, 0.5));
@@ -723,10 +724,17 @@ void Scene3DTestScene::createDescDlg()
     float margin = 10;
     
     // first, create dialog, add title and description text on it
-    _descDlg = ui::Scale9Sprite::createWithSpriteFrameName("button_actived.png");
-    _descDlg->setContentSize(dlgSize);
-    _descDlg->setOpacity(224);
-    _descDlg->setPosition(pos);
+    // use Layout, which setTouchEnabled(true), as background, it will swallow touch event
+    auto desdDlg = ui::Layout::create();
+    desdDlg->setBackGroundImageScale9Enabled(true);
+    desdDlg->setBackGroundImage("button_actived.png", ui::Widget::TextureResType::PLIST);
+    desdDlg->setContentSize(dlgSize);
+    desdDlg->setAnchorPoint(Vec2(0.5f, 0.5f));
+    desdDlg->setOpacity(224);
+    desdDlg->setPosition(pos);
+    desdDlg->setTouchEnabled(true);
+    _descDlg = desdDlg;
+
     
     // title
     auto title = Label::createWithTTF("Description Dialog","fonts/arial.ttf",16);
@@ -869,53 +877,28 @@ void Scene3DTestScene::onTouchEnd(Touch* touch, Event* event)
     if(_player)
     {
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
-        // first, convert screen touch location to the world location on near and far plane
+        // convert screen touch location to the world location on near and far plane
         auto size = Director::getInstance()->getWinSize();
         camera->unprojectGL(size, &nearP, &nearP);
         camera->unprojectGL(size, &farP, &farP);
-        // second, convert world location to terrain's local position on near/far plane
-        auto worldToNodeMat = _terrain->getNodeToWorldTransform();
-        worldToNodeMat.inverse();
-        worldToNodeMat.transformPoint(&nearP);
-        worldToNodeMat.transformPoint(&farP);
-        // create a ray from point which on near plane to point which on far plane
         Vec3 dir = farP - nearP;
         dir.normalize();
-        Vec3 rayStep = 15*dir;
-        Vec3 rayPos =  nearP;
-        Vec3 rayStartPosition = nearP;
-        Vec3 lastRayPosition =rayPos;
-        rayPos += rayStep;
-        // Linear search - Loop until find a point inside and outside the terrain Vector3
-        float height = _terrain->getHeight(rayPos.x,rayPos.z);
-        
-        while (rayPos.y > height)
+        Vec3 collisionPoint;
+        bool isInTerrain = _terrain->getIntersectionPoint(Ray(nearP, dir), collisionPoint);
+        if (!isInTerrain)
         {
-            lastRayPosition = rayPos;
-            rayPos += rayStep;
-            height = _terrain->getHeight(rayPos.x,rayPos.z);
+            _player->idle();
         }
-        
-        Vec3 startPosition = lastRayPosition;
-        Vec3 endPosition = rayPos;
-        
-        for (int i= 0; i< 32; i++)
+        else
         {
-            // Binary search pass
-            Vec3 middlePoint = (startPosition + endPosition) * 0.5f;
-            if (middlePoint.y < height)
-                endPosition = middlePoint;
-            else
-                startPosition = middlePoint;
+            dir = collisionPoint - _player->getPosition3D();
+            dir.y = 0;
+            dir.normalize();
+            _player->_headingAngle =  -1*acos(dir.dot(Vec3(0,0,-1)));
+            dir.cross(dir,Vec3(0,0,-1),&_player->_headingAxis);
+            _player->_targetPos=collisionPoint;
+            _player->forward();
         }
-        Vec3 collisionPoint = (startPosition + endPosition) * 0.5f;
-        dir = collisionPoint - _player->getPosition3D();
-        dir.y = 0;
-        dir.normalize();
-        _player->_headingAngle =  -1*acos(dir.dot(Vec3(0,0,-1)));
-        dir.cross(dir,Vec3(0,0,-1),&_player->_headingAxis);
-        _player->_targetPos=collisionPoint;
-        _player->forward();
     }
     event->stopPropagation();
 }
