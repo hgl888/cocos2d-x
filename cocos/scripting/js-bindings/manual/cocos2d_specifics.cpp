@@ -734,26 +734,7 @@ JSCallbackWrapper::JSCallbackWrapper(JS::HandleValue owner)
 
 JSCallbackWrapper::~JSCallbackWrapper()
 {
-    JSContext* cx = ScriptingCore::getInstance()->getGlobalContext();
-    JS::RootedValue ownerVal(cx, _owner);
-    if (!ownerVal.isNullOrUndefined())
-    {
-        JS::RootedValue target(cx, _jsCallback);
-        if (!target.isNullOrUndefined())
-        {
-            js_remove_object_reference(ownerVal, target);
-        }
-        target.set(_jsThisObj);
-        if (!target.isNullOrUndefined())
-        {
-            js_remove_object_reference(ownerVal, target);
-        }
-        target.set(_extraData);
-        if (!target.isNullOrUndefined())
-        {
-            js_remove_object_reference(ownerVal, target);
-        }
-    }
+    reset();
 }
 
 void JSCallbackWrapper::setJSCallbackFunc(JS::HandleValue func) {
@@ -823,6 +804,33 @@ const jsval JSCallbackWrapper::getJSCallbackThis() const
 const jsval JSCallbackWrapper::getJSExtraData() const
 {
     return _extraData;
+}
+
+void JSCallbackWrapper::reset()
+{
+    JSContext* cx = ScriptingCore::getInstance()->getGlobalContext();
+    JS::RootedValue ownerVal(cx, _owner);
+    if (!ownerVal.isNullOrUndefined())
+    {
+        JS::RootedValue target(cx, _jsCallback);
+        if (!target.isNullOrUndefined())
+        {
+            js_remove_object_reference(ownerVal, target);
+        }
+        target.set(_jsThisObj);
+        if (!target.isNullOrUndefined())
+        {
+            js_remove_object_reference(ownerVal, target);
+        }
+        target.set(_extraData);
+        if (!target.isNullOrUndefined())
+        {
+            js_remove_object_reference(ownerVal, target);
+        }
+    }
+    _jsCallback = JS::NullValue();
+    _jsThisObj = JS::NullValue();
+    _extraData = JS::NullValue();
 }
 
 // cc.CallFunc.create( func, this, [data])
@@ -1217,6 +1225,7 @@ void JSScheduleWrapper::removeTargetForJSObject(JS::HandleObject jsTargetObj, JS
             free(removed);
         }
     }
+    target->reset();
     dump();
     CCLOGINFO("removeTargetForJSObject end");
 }
@@ -1266,8 +1275,11 @@ void JSScheduleWrapper::scheduleFunc(float dt)
     if(!callback.isNullOrUndefined()) {
         JS::HandleValueArray args = JS::HandleValueArray::fromMarkedLocation(1, &data);
         JS::RootedValue retval(cx);
-        JS::RootedObject callbackTarget(cx, getJSCallbackThis().toObjectOrNull());
-        JS_CallFunctionValue(cx, callbackTarget, callback, args, &retval);
+        JS::RootedValue targetVal(cx, getJSCallbackThis());
+        if (!targetVal.isNullOrUndefined()) {
+            JS::RootedObject target(cx, targetVal.toObjectOrNull());
+            JS_CallFunctionValue(cx, target, callback, args, &retval);
+        }
     }
 }
 
@@ -5712,7 +5724,7 @@ bool js_cocos2dx_AutoPolygon_generatePolygon(JSContext *cx, uint32_t argc, jsval
         double arg2;
         ok &= jsval_to_std_string(cx, args.get(0), &arg0);
         ok &= jsval_to_ccrect(cx, args.get(1), &arg1);
-        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !isnan(arg2);
+        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !std::isnan(arg2);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_AutoPolygon_generatePolygon : Error processing arguments");
         cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, arg2));
         jsval jsret = JSVAL_NULL;
@@ -5729,8 +5741,8 @@ bool js_cocos2dx_AutoPolygon_generatePolygon(JSContext *cx, uint32_t argc, jsval
         double arg3;
         ok &= jsval_to_std_string(cx, args.get(0), &arg0);
         ok &= jsval_to_ccrect(cx, args.get(1), &arg1);
-        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !isnan(arg2);
-        ok &= JS::ToNumber( cx, args.get(3), &arg3) && !isnan(arg3);
+        ok &= JS::ToNumber( cx, args.get(2), &arg2) && !std::isnan(arg2);
+        ok &= JS::ToNumber( cx, args.get(3), &arg3) && !std::isnan(arg3);
         JSB_PRECONDITION2(ok, cx, false, "js_cocos2dx_AutoPolygon_generatePolygon : Error processing arguments");
         cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, arg2, arg3));
         jsval jsret = JSVAL_NULL;

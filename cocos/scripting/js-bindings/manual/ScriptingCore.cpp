@@ -68,8 +68,6 @@
 #define  LOGD(...) js_log(__VA_ARGS__)
 #endif
 
-#include "scripting/js-bindings/manual/js_bindings_config.h"
-
 #if COCOS2D_DEBUG
 #define TRACE_DEBUGGER_SERVER(...) CCLOG(__VA_ARGS__)
 #else
@@ -429,7 +427,7 @@ void registerDefaultClasses(JSContext* cx, JS::HandleObject global) {
 
     // register some global functions
     JS_DefineFunction(cx, global, "require", ScriptingCore::executeScript, 1, JSPROP_PERMANENT);
-    JS_DefineFunction(cx, global, "log", ScriptingCore::log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, global, "log", ScriptingCore::log, 0, JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "executeScript", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
     JS_DefineFunction(cx, global, "forceGC", ScriptingCore::forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 
@@ -1332,12 +1330,10 @@ int ScriptingCore::handleComponentEvent(void* data)
     else if (action == kComponentOnEnter)
     {
         ret = executeFunctionWithOwner(nodeValue, "onEnter", 1, &dataVal, &retval);
-        resumeSchedulesAndActions(p);
     }
     else if (action == kComponentOnExit)
     {
         ret = executeFunctionWithOwner(nodeValue, "onExit", 1, &dataVal, &retval);
-        pauseSchedulesAndActions(p);
     }
     else if (action == kComponentOnUpdate)
     {
@@ -1525,7 +1521,7 @@ bool ScriptingCore::executeFunctionWithOwner(jsval owner, const char *name, cons
     return bRet;
 }
 
-bool ScriptingCore::handleKeybardEvent(void* nativeObj, cocos2d::EventKeyboard::KeyCode keyCode, bool isPressed, cocos2d::Event* event)
+bool ScriptingCore::handleKeyboardEvent(void* nativeObj, cocos2d::EventKeyboard::KeyCode keyCode, bool isPressed, cocos2d::Event* event)
 {
     JSAutoCompartment ac(_cx, _global.ref());
 
@@ -1757,20 +1753,26 @@ void ScriptingCore::garbageCollect()
 
 void SimpleRunLoop::update(float dt)
 {
-    g_qMutex.lock();
-    size_t size = g_queue.size();
-    g_qMutex.unlock();
-
-    while (size > 0)
+    std::string message;
+    size_t messageCount = 0;
+    while (true)
     {
         g_qMutex.lock();
-        auto first = g_queue.begin();
-        std::string str = *first;
-        g_queue.erase(first);
-        size = g_queue.size();
+        messageCount = g_queue.size();
+        if (messageCount > 0)
+        {
+            auto first = g_queue.begin();
+            message = *first;
+            g_queue.erase(first);
+            --messageCount;
+        }
         g_qMutex.unlock();
-
-        ScriptingCore::getInstance()->debugProcessInput(str);
+        
+        if (!message.empty())
+            ScriptingCore::getInstance()->debugProcessInput(message);
+        
+        if (messageCount == 0)
+            break;
     }
 }
 
@@ -1788,20 +1790,26 @@ void ScriptingCore::debugProcessInput(const std::string& str)
 
 static bool NS_ProcessNextEvent()
 {
-    g_qMutex.lock();
-    size_t size = g_queue.size();
-    g_qMutex.unlock();
-
-    while (size > 0)
+    std::string message;
+    size_t messageCount = 0;
+    while (true)
     {
         g_qMutex.lock();
-        auto first = g_queue.begin();
-        std::string str = *first;
-        g_queue.erase(first);
-        size = g_queue.size();
+        messageCount = g_queue.size();
+        if (messageCount > 0)
+        {
+            auto first = g_queue.begin();
+            message = *first;
+            g_queue.erase(first);
+            --messageCount;
+        }
         g_qMutex.unlock();
-
-        ScriptingCore::getInstance()->debugProcessInput(str);
+        
+        if (!message.empty())
+            ScriptingCore::getInstance()->debugProcessInput(message);
+        
+        if (messageCount == 0)
+            break;
     }
 //    std::this_thread::yield();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -1886,7 +1894,7 @@ static void serverEntryPoint(unsigned int port)
     struct addrinfo hints, *result = nullptr, *rp = nullptr;
     int s = 0;
     memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family = AF_INET;       // IPv4
+    hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
     hints.ai_flags = AI_PASSIVE;     // fill in my IP for me
 

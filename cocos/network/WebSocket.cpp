@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -811,7 +811,7 @@ void WebSocket::onClientReceivedData(void* in, ssize_t len)
 
         ssize_t frameSize = frameData->size();
 
-        bool isBinary = lws_frame_is_binary(_wsInstance);
+        bool isBinary = (lws_frame_is_binary(_wsInstance) != 0);
 
         if (!isBinary)
         {
