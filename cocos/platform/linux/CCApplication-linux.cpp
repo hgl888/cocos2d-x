@@ -37,7 +37,7 @@ NS_CC_BEGIN
 
 
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = 0;
+Application * Application::sm_pSharedApplication = nullptr;
 
 static long getCurrentMillSecond() {
     long lLastTime;
@@ -58,7 +58,7 @@ Application::Application()
 Application::~Application()
 {
     CC_ASSERT(this == sm_pSharedApplication);
-    sm_pSharedApplication = NULL;
+    sm_pSharedApplication = nullptr;
 }
 
 int Application::run()
@@ -143,7 +143,7 @@ std::string Application::getVersion()
 
 bool Application::openURL(const std::string &url)
 {
-    std::string op = std::string("open ").append(url);
+    std::string op = std::string("xdg-open ").append(url);
     return system(op.c_str())!=-1;
 }
 

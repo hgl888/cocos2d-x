@@ -29,6 +29,16 @@ getMaxT : function (
 },
 
 /**
+ * @method setAlphaTexture
+ * @param {cc.Texture2D} arg0
+ */
+setAlphaTexture : function (
+texture2d 
+)
+{
+},
+
+/**
  * @method getStringForFormat
  * @return {char}
  */
@@ -121,6 +131,16 @@ getPixelsHigh : function (
 },
 
 /**
+ * @method getAlphaTextureName
+ * @return {unsigned int}
+ */
+getAlphaTextureName : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method getBitsPerPixelForFormat
 * @param {cc.Texture2D::PixelFormat} pixelformat
 * @return {unsigned int|unsigned int}
@@ -150,6 +170,8 @@ getName : function (
 * @param {size_object} size
 * @param {cc.TextHAlignment} texthalignment
 * @param {cc.TextVAlignment} textvalignment
+* @param {bool} bool
+* @param {int} int
 * @return {bool|bool}
 */
 initWithString : function(
@@ -158,7 +180,9 @@ str,
 float,
 size,
 texthalignment,
-textvalignment 
+textvalignment,
+bool,
+int 
 )
 {
     return false;
@@ -1620,16 +1644,6 @@ getScheduler : function(
 },
 
 /**
- * @method getOrderOfArrival
- * @return {int}
- */
-getOrderOfArrival : function (
-)
-{
-    return 0;
-},
-
-/**
  * @method setActionManager
  * @param {cc.ActionManager} arg0
  */
@@ -1806,16 +1820,6 @@ int
 )
 {
     return cc.Node;
-},
-
-/**
- * @method setOrderOfArrival
- * @param {int} arg0
- */
-setOrderOfArrival : function (
-int 
-)
-{
 },
 
 /**
@@ -2055,6 +2059,14 @@ getScale : function (
 },
 
 /**
+ * @method updateOrderOfArrival
+ */
+updateOrderOfArrival : function (
+)
+{
+},
+
+/**
  * @method getNormalizedPosition
  * @return {vec2_object}
  */
@@ -2189,9 +2201,13 @@ setCameraOrderDirty : function (
 /**
  * @method render
  * @param {cc.Renderer} arg0
+ * @param {mat4_object} arg1
+ * @param {mat4_object} arg2
  */
 render : function (
-renderer 
+renderer, 
+mat4, 
+mat4 
 )
 {
 },
@@ -2328,6 +2344,16 @@ setIMEKeyboardState : function (
 bool 
 )
 {
+},
+
+/**
+ * @method getVR
+ * @return {cc.VRIRenderer}
+ */
+getVR : function (
+)
+{
+    return cc.VRIRenderer;
 },
 
 /**
@@ -2488,6 +2514,28 @@ isRetinaDisplay : function (
 )
 {
     return false;
+},
+
+/**
+ * @method renderScene
+ * @param {cc.Scene} arg0
+ * @param {cc.Renderer} arg1
+ */
+renderScene : function (
+scene, 
+renderer 
+)
+{
+},
+
+/**
+ * @method setVR
+ * @param {cc.VRIRenderer} arg0
+ */
+setVR : function (
+vrirenderer 
+)
+{
 },
 
 /**
@@ -4228,11 +4276,13 @@ glprogram
 
 /**
  * @method getOrCreateWithGLProgramName
- * @param {String} arg0
- * @return {cc.GLProgramState}
- */
-getOrCreateWithGLProgramName : function (
-str 
+* @param {String|String} str
+* @param {cc.Texture2D} texture2d
+* @return {cc.GLProgramState|cc.GLProgramState}
+*/
+getOrCreateWithGLProgramName : function(
+str,
+texture2d 
 )
 {
     return cc.GLProgramState;
@@ -6444,6 +6494,16 @@ value
 gatherGPUInfo : function (
 )
 {
+},
+
+/**
+ * @method supportsMapBuffer
+ * @return {bool}
+ */
+supportsMapBuffer : function (
+)
+{
+    return false;
 },
 
 /**
@@ -15105,6 +15165,14 @@ getGravity : function (
 },
 
 /**
+ * @method resumeEmissions
+ */
+resumeEmissions : function (
+)
+{
+},
+
+/**
  * @method getTangentialAccel
  * @return {float}
  */
@@ -15132,6 +15200,14 @@ getSpeed : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method pauseEmissions
+ */
+pauseEmissions : function (
+)
+{
 },
 
 /**
@@ -15674,6 +15750,16 @@ getLife : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method isPaused
+ * @return {bool}
+ */
+isPaused : function (
+)
+{
+    return false;
 },
 
 /**
@@ -17487,14 +17573,6 @@ color4f
 },
 
 /**
- * @method endToLua
- */
-endToLua : function (
-)
-{
-},
-
-/**
  * @method beginWithClear
 * @param {float|float|float} float
 * @param {float|float|float} float
@@ -18974,6 +19052,14 @@ TransitionProgressOutIn : function (
 cc.Camera = {
 
 /**
+ * @method restore
+ */
+restore : function (
+)
+{
+},
+
+/**
  * @method getDepth
  * @return {char}
  */
@@ -19071,6 +19157,14 @@ mat4
 )
 {
     return 0;
+},
+
+/**
+ * @method restoreViewport
+ */
+restoreViewport : function (
+)
+{
 },
 
 /**
@@ -19189,6 +19283,14 @@ vec3
 )
 {
     return cc.Vec2;
+},
+
+/**
+ * @method restoreFrameBufferObject
+ */
+restoreFrameBufferObject : function (
+)
+{
 },
 
 /**
@@ -21364,6 +21466,16 @@ waitForQuit : function (
 },
 
 /**
+ * @method setETC1AlphaFileSuffix
+ * @param {String} arg0
+ */
+setETC1AlphaFileSuffix : function (
+str 
+)
+{
+},
+
+/**
  * @method TextureCache
  * @constructor
  */
@@ -22514,13 +22626,23 @@ TMXTilesetInfo : function (
 cc.TMXMapInfo = {
 
 /**
- * @method setObjectGroups
- * @param {Array} arg0
+ * @method setCurrentString
+ * @param {String} arg0
  */
-setObjectGroups : function (
-array 
+setCurrentString : function (
+str 
 )
 {
+},
+
+/**
+ * @method getHexSideLength
+ * @return {int}
+ */
+getHexSideLength : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -22556,13 +22678,13 @@ getOrientation : function (
 },
 
 /**
- * @method isStoringCharacters
- * @return {bool}
+ * @method setObjectGroups
+ * @param {Array} arg0
  */
-isStoringCharacters : function (
+setObjectGroups : function (
+array 
 )
 {
-    return false;
 },
 
 /**
@@ -22627,6 +22749,26 @@ getLayers : function(
 )
 {
     return new Array();
+},
+
+/**
+ * @method getStaggerAxis
+ * @return {int}
+ */
+getStaggerAxis : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setHexSideLength
+ * @param {int} arg0
+ */
+setHexSideLength : function (
+int 
+)
+{
 },
 
 /**
@@ -22714,6 +22856,16 @@ getTileProperties : function (
 },
 
 /**
+ * @method isStoringCharacters
+ * @return {bool}
+ */
+isStoringCharacters : function (
+)
+{
+    return false;
+},
+
+/**
  * @method getExternalTilesetFileName
  * @return {String}
  */
@@ -22744,11 +22896,11 @@ getTMXFileName : function (
 },
 
 /**
- * @method setCurrentString
- * @param {String} arg0
+ * @method setStaggerIndex
+ * @param {int} arg0
  */
-setCurrentString : function (
-str 
+setStaggerIndex : function (
+int 
 )
 {
 },
@@ -22794,11 +22946,31 @@ size
 },
 
 /**
+ * @method getCurrentString
+ * @return {String}
+ */
+getCurrentString : function (
+)
+{
+    return ;
+},
+
+/**
  * @method setStoringCharacters
  * @param {bool} arg0
  */
 setStoringCharacters : function (
 bool 
+)
+{
+},
+
+/**
+ * @method setStaggerAxis
+ * @param {int} arg0
+ */
+setStaggerAxis : function (
+int 
 )
 {
 },
@@ -22834,13 +23006,13 @@ getProperties : function(
 },
 
 /**
- * @method getCurrentString
- * @return {String}
+ * @method getStaggerIndex
+ * @return {int}
  */
-getCurrentString : function (
+getStaggerIndex : function (
 )
 {
-    return ;
+    return 0;
 },
 
 /**
