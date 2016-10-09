@@ -234,7 +234,7 @@ public:
     void* getUserData() const
     {
         return _pUserData;
-    };
+    }
     
     /**
      * Set the target and related callback selector.
@@ -292,7 +292,6 @@ public:
         _prxy( SEL_HttpResponse cb ) :_cb(cb) {}
         /** Destructor. */
         ~_prxy(){};
-        /** Destructor. */
         operator SEL_HttpResponse() const { return _cb; }
         CC_DEPRECATED_ATTRIBUTE operator SEL_CallFuncND()   const { return (SEL_CallFuncND) _cb; }
     protected:
