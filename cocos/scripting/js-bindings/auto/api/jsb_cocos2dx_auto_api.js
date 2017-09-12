@@ -83,14 +83,6 @@ getMaxS : function (
 },
 
 /**
- * @method releaseGLTexture
- */
-releaseGLTexture : function (
-)
-{
-},
-
-/**
  * @method hasPremultipliedAlpha
  * @return {bool}
  */
@@ -98,6 +90,16 @@ hasPremultipliedAlpha : function (
 )
 {
     return false;
+},
+
+/**
+ * @method getPixelsHigh
+ * @return {int}
+ */
+getPixelsHigh : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -118,16 +120,6 @@ int
 )
 {
     return false;
-},
-
-/**
- * @method getPixelsHigh
- * @return {int}
- */
-getPixelsHigh : function (
-)
-{
-    return 0;
 },
 
 /**
@@ -253,6 +245,16 @@ generateMipmap : function (
 },
 
 /**
+ * @method getAlphaTexture
+ * @return {cc.Texture2D}
+ */
+getAlphaTexture : function (
+)
+{
+    return cc.Texture2D;
+},
+
+/**
  * @method getDescription
  * @return {String}
  */
@@ -280,6 +282,14 @@ getContentSizeInPixels : function (
 )
 {
     return cc.Size;
+},
+
+/**
+ * @method releaseGLTexture
+ */
+releaseGLTexture : function (
+)
+{
 },
 
 /**
@@ -1634,6 +1644,16 @@ str
 },
 
 /**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
  * @method getDisplayedOpacity
  * @return {unsigned char}
  */
@@ -2041,13 +2061,15 @@ vec3
 },
 
 /**
- * @method update
- * @param {float} arg0
+ * @method getNumberOfRunningActionsByTag
+ * @param {int} arg0
+ * @return {int}
  */
-update : function (
-float 
+getNumberOfRunningActionsByTag : function (
+int 
 )
 {
+    return 0;
 },
 
 /**
@@ -2186,6 +2208,16 @@ create : function (
 )
 {
     return cc.Node;
+},
+
+/**
+ * @method getAttachedNodeCount
+ * @return {int}
+ */
+getAttachedNodeCount : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -2691,20 +2723,20 @@ pause : function (
 
 /**
  * @method pushProjectionMatrix
- * @param {unsigned int} arg0
+ * @param {unsigned long} arg0
  */
 pushProjectionMatrix : function (
-int 
+long 
 )
 {
 },
 
 /**
  * @method popProjectionMatrix
- * @param {unsigned int} arg0
+ * @param {unsigned long} arg0
  */
 popProjectionMatrix : function (
-int 
+long 
 )
 {
 },
@@ -2721,10 +2753,10 @@ eventdispatcher
 
 /**
  * @method loadProjectionIdentityMatrix
- * @param {unsigned int} arg0
+ * @param {unsigned long} arg0
  */
 loadProjectionIdentityMatrix : function (
-int 
+long 
 )
 {
 },
@@ -2877,8 +2909,10 @@ getVisibleOrigin : function (
 
 /**
  * @method mainLoop
- */
-mainLoop : function (
+* @param {float} float
+*/
+mainLoop : function(
+float 
 )
 {
 },
@@ -2974,11 +3008,11 @@ scheduler
 /**
  * @method multiplyProjectionMatrix
  * @param {mat4_object} arg0
- * @param {unsigned int} arg1
+ * @param {unsigned long} arg1
  */
 multiplyProjectionMatrix : function (
 mat4, 
-int 
+long 
 )
 {
 },
@@ -3256,21 +3290,21 @@ getVisibleSize : function (
 /**
  * @method loadProjectionMatrix
  * @param {mat4_object} arg0
- * @param {unsigned int} arg1
+ * @param {unsigned long} arg1
  */
 loadProjectionMatrix : function (
 mat4, 
-int 
+long 
 )
 {
 },
 
 /**
  * @method initProjectionMatrixStack
- * @param {unsigned int} arg0
+ * @param {unsigned long} arg0
  */
 initProjectionMatrixStack : function (
-int 
+long 
 )
 {
 },
@@ -3428,6 +3462,14 @@ int
  */
 performFunctionInCocosThread : function (
 func 
+)
+{
+},
+
+/**
+ * @method removeAllFunctionsToBePerformedInCocosThread
+ */
+removeAllFunctionsToBePerformedInCocosThread : function (
 )
 {
 },
@@ -4293,12 +4335,12 @@ getGLProgram : function (
 
 /**
  * @method setUniformTexture
-* @param {String|String|int|int} str
-* @param {unsigned int|cc.Texture2D|cc.Texture2D|unsigned int} int
+* @param {int|String} int
+* @param {cc.Texture2D|cc.Texture2D} texture2d
 */
 setUniformTexture : function(
-int,
-int 
+str,
+texture2d 
 )
 {
 },
@@ -6674,13 +6716,9 @@ char
 
 /**
  * @method getString
- * @param {char} arg0
- * @param {char} arg1
  * @return {char}
  */
 getString : function (
-char, 
-char 
 )
 {
     return 0;
@@ -6688,11 +6726,9 @@ char
 
 /**
  * @method getLong
- * @param {char} arg0
  * @return {long}
  */
 getLong : function (
-char 
 )
 {
     return 0;
@@ -6800,13 +6836,9 @@ char
 
 /**
  * @method getBool
- * @param {char} arg0
- * @param {bool} arg1
  * @return {bool}
  */
 getBool : function (
-char, 
-bool 
 )
 {
     return false;
@@ -6828,11 +6860,9 @@ vec3
 
 /**
  * @method getType
- * @param {char} arg0
  * @return {cc.Properties::Type}
  */
 getType : function (
-char 
 )
 {
     return 0;
@@ -6850,11 +6880,9 @@ getNextNamespace : function (
 
 /**
  * @method getInt
- * @param {char} arg0
  * @return {int}
  */
 getInt : function (
-char 
 )
 {
     return 0;
@@ -6914,11 +6942,9 @@ getNextProperty : function (
 
 /**
  * @method getFloat
- * @param {char} arg0
  * @return {float}
  */
 getFloat : function (
-char 
 )
 {
     return 0;
@@ -7041,26 +7067,28 @@ str
 
 /**
  * @method getStringFromFile
- * @param {String} arg0
- * @return {String}
- */
-getStringFromFile : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {String}
+*/
+getStringFromFile : function(
+str,
+func 
 )
 {
-    return ;
 },
 
 /**
  * @method removeFile
- * @param {String} arg0
- * @return {bool}
- */
-removeFile : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+removeFile : function(
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7077,18 +7105,29 @@ str
 
 /**
  * @method renameFile
-* @param {String|String} str
-* @param {String|String} str
-* @param {String} str
+* @param {String|String|String|String} str
+* @param {String|String|String|String} str
+* @param {String|String|function} str
+* @param {function} func
 * @return {bool|bool}
 */
 renameFile : function(
 str,
 str,
-str 
+str,
+func 
 )
 {
-    return false;
+},
+
+/**
+ * @method getDefaultResourceRootPath
+ * @return {String}
+ */
+getDefaultResourceRootPath : function (
+)
+{
+    return ;
 },
 
 /**
@@ -7148,6 +7187,40 @@ str
 },
 
 /**
+ * @method getOriginalSearchPaths
+ * @return {Array}
+ */
+getOriginalSearchPaths : function (
+)
+{
+    return new Array();
+},
+
+/**
+ * @method getNewFilename
+ * @param {String} arg0
+ * @return {String}
+ */
+getNewFilename : function (
+str 
+)
+{
+    return ;
+},
+
+/**
+ * @method listFiles
+ * @param {String} arg0
+ * @return {Array}
+ */
+listFiles : function (
+str 
+)
+{
+    return new Array();
+},
+
+/**
  * @method getValueMapFromFile
  * @param {String} arg0
  * @return {map_object}
@@ -7161,14 +7234,15 @@ str
 
 /**
  * @method getFileSize
- * @param {String} arg0
- * @return {long}
- */
-getFileSize : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {long}
+*/
+getFileSize : function(
+str,
+func 
 )
 {
-    return 0;
 },
 
 /**
@@ -7187,14 +7261,15 @@ int
 
 /**
  * @method removeDirectory
- * @param {String} arg0
- * @return {bool}
- */
-removeDirectory : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+removeDirectory : function(
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7209,16 +7284,17 @@ array
 
 /**
  * @method writeStringToFile
- * @param {String} arg0
- * @param {String} arg1
- * @return {bool}
- */
-writeStringToFile : function (
-str, 
-str 
+* @param {String|String} str
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+writeStringToFile : function(
+str,
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7257,28 +7333,30 @@ bool
 
 /**
  * @method writeValueVectorToFile
- * @param {Array} arg0
- * @param {String} arg1
- * @return {bool}
- */
-writeValueVectorToFile : function (
-array, 
-str 
+* @param {Array|Array} array
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+writeValueVectorToFile : function(
+array,
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
  * @method isFileExist
- * @param {String} arg0
- * @return {bool}
- */
-isFileExist : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+isFileExist : function(
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7317,16 +7395,17 @@ str
 
 /**
  * @method writeValueMapToFile
- * @param {map_object} arg0
- * @param {String} arg1
- * @return {bool}
- */
-writeValueMapToFile : function (
-map, 
-str 
+* @param {map_object|map_object} map
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+writeValueMapToFile : function(
+map,
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7363,14 +7442,15 @@ bool
 
 /**
  * @method isDirectoryExist
- * @param {String} arg0
- * @return {bool}
- */
-isDirectoryExist : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+isDirectoryExist : function(
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7395,14 +7475,15 @@ getSearchResolutionsOrder : function (
 
 /**
  * @method createDirectory
- * @param {String} arg0
- * @return {bool}
- */
-createDirectory : function (
-str 
+* @param {String|String} str
+* @param {function} func
+* @return {bool}
+*/
+createDirectory : function(
+str,
+func 
 )
 {
-    return false;
 },
 
 /**
@@ -7413,6 +7494,18 @@ getWritablePath : function (
 )
 {
     return ;
+},
+
+/**
+ * @method listFilesRecursively
+ * @param {String} arg0
+ * @param {Array} arg1
+ */
+listFilesRecursively : function (
+str, 
+array 
+)
+{
 },
 
 /**
@@ -7566,20 +7659,6 @@ node
 },
 
 /**
- * @method addCustomEventListener
- * @param {String} arg0
- * @param {function} arg1
- * @return {cc.EventListenerCustom}
- */
-addCustomEventListener : function (
-str, 
-func 
-)
-{
-    return cc.EventListenerCustom;
-},
-
-/**
  * @method addEventListenerWithFixedPriority
  * @param {cc.EventListener} arg0
  * @param {int} arg1
@@ -7635,6 +7714,18 @@ dispatchEvent : function (
 event 
 )
 {
+},
+
+/**
+ * @method hasEventListener
+ * @param {std::basic_string<char>} arg0
+ * @return {bool}
+ */
+hasEventListener : function (
+basic_string<char> 
+)
+{
+    return false;
 },
 
 /**
@@ -7728,18 +7819,6 @@ func
 },
 
 /**
- * @method create
- * @param {function} arg0
- * @return {cc.EventListenerAcceleration}
- */
-create : function (
-func 
-)
-{
-    return cc.EventListenerAcceleration;
-},
-
-/**
  * @method EventListenerAcceleration
  * @constructor
  */
@@ -7754,20 +7833,6 @@ EventListenerAcceleration : function (
  * @class EventListenerCustom
  */
 cc.EventListenerCustom = {
-
-/**
- * @method create
- * @param {String} arg0
- * @param {function} arg1
- * @return {cc.EventListenerCustom}
- */
-create : function (
-str, 
-func 
-)
-{
-    return cc.EventListenerCustom;
-},
 
 /**
  * @method EventListenerCustom
@@ -7839,7 +7904,7 @@ cc.EventMouse = {
 
 /**
  * @method getMouseButton
- * @return {int}
+ * @return {cc.EventMouse::MouseButton}
  */
 getMouseButton : function (
 )
@@ -7859,10 +7924,10 @@ getLocation : function (
 
 /**
  * @method setMouseButton
- * @param {int} arg0
+ * @param {cc.EventMouse::MouseButton} arg0
  */
 setMouseButton : function (
-int 
+mousebutton 
 )
 {
 },
@@ -8031,6 +8096,23 @@ EventListenerMouse : function (
 };
 
 /**
+ * @class EventListenerController
+ */
+cc.EventListenerController = {
+
+/**
+ * @method create
+ * @return {cc.EventListenerController}
+ */
+create : function (
+)
+{
+    return cc.EventListenerController;
+},
+
+};
+
+/**
  * @class EventListenerTouchOneByOne
  */
 cc.EventListenerTouchOneByOne = {
@@ -8096,6 +8178,88 @@ init : function (
  * @constructor
  */
 EventListenerTouchAllAtOnce : function (
+)
+{
+},
+
+};
+
+/**
+ * @class EventController
+ */
+cc.EventController = {
+
+/**
+ * @method getControllerEventType
+ * @return {cc.EventController::ControllerEventType}
+ */
+getControllerEventType : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setConnectStatus
+ * @param {bool} arg0
+ */
+setConnectStatus : function (
+bool 
+)
+{
+},
+
+/**
+ * @method isConnected
+ * @return {bool}
+ */
+isConnected : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setKeyCode
+ * @param {int} arg0
+ */
+setKeyCode : function (
+int 
+)
+{
+},
+
+/**
+ * @method getController
+ * @return {cc.Controller}
+ */
+getController : function (
+)
+{
+    return cc.Controller;
+},
+
+/**
+ * @method getKeyCode
+ * @return {int}
+ */
+getKeyCode : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method EventController
+ * @constructor
+* @param {cc.EventController::ControllerEventType|cc.EventController::ControllerEventType} controllereventtype
+* @param {cc.Controller|cc.Controller} controller
+* @param {bool|int} bool
+*/
+EventController : function(
+controllereventtype,
+controller,
+int 
 )
 {
 },
@@ -10674,13 +10838,13 @@ node
 },
 
 /**
- * @method update
- * @param {float} arg0
+ * @method getNumberOfRunningActions
+ * @return {int}
  */
-update : function (
-float 
+getNumberOfRunningActions : function (
 )
 {
+    return 0;
 },
 
 /**
@@ -10736,6 +10900,26 @@ action
 },
 
 /**
+ * @method pauseAllRunningActions
+ * @return {Array}
+ */
+pauseAllRunningActions : function (
+)
+{
+    return new Array();
+},
+
+/**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
  * @method removeAllActionsByTag
  * @param {int} arg0
  * @param {cc.Node} arg1
@@ -10748,13 +10932,17 @@ node
 },
 
 /**
- * @method pauseAllRunningActions
- * @return {Array}
+ * @method getNumberOfRunningActionsInTargetByTag
+ * @param {cc.Node} arg0
+ * @param {int} arg1
+ * @return {unsigned long}
  */
-pauseAllRunningActions : function (
+getNumberOfRunningActionsInTargetByTag : function (
+node, 
+int 
 )
 {
-    return new Array();
+    return 0;
 },
 
 /**
@@ -11963,10 +12151,10 @@ color4f
 
 /**
  * @method setLineWidth
- * @param {int} arg0
+ * @param {float} arg0
  */
 setLineWidth : function (
-int 
+float 
 )
 {
 },
@@ -12481,7 +12669,7 @@ isWrapEnabled : function (
 
 /**
  * @method getOutlineSize
- * @return {int}
+ * @return {float}
  */
 getOutlineSize : function (
 )
@@ -13896,6 +14084,242 @@ vec2
  * @constructor
  */
 LayerGradient : function (
+)
+{
+},
+
+};
+
+/**
+ * @class LayerRadialGradient
+ */
+cc.LayerRadialGradient = {
+
+/**
+ * @method getStartColor
+ * @return {color4b_object}
+ */
+getStartColor : function (
+)
+{
+    return cc.Color4B;
+},
+
+/**
+ * @method getBlendFunc
+ * @return {cc.BlendFunc}
+ */
+getBlendFunc : function (
+)
+{
+    return cc.BlendFunc;
+},
+
+/**
+ * @method getStartColor3B
+ * @return {color3b_object}
+ */
+getStartColor3B : function (
+)
+{
+    return cc.Color3B;
+},
+
+/**
+ * @method getStartOpacity
+ * @return {unsigned char}
+ */
+getStartOpacity : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setCenter
+ * @param {vec2_object} arg0
+ */
+setCenter : function (
+vec2 
+)
+{
+},
+
+/**
+ * @method getEndColor
+ * @return {color4b_object}
+ */
+getEndColor : function (
+)
+{
+    return cc.Color4B;
+},
+
+/**
+ * @method setStartOpacity
+ * @param {unsigned char} arg0
+ */
+setStartOpacity : function (
+char 
+)
+{
+},
+
+/**
+ * @method getCenter
+ * @return {vec2_object}
+ */
+getCenter : function (
+)
+{
+    return cc.Vec2;
+},
+
+/**
+ * @method setEndOpacity
+ * @param {unsigned char} arg0
+ */
+setEndOpacity : function (
+char 
+)
+{
+},
+
+/**
+ * @method setExpand
+ * @param {float} arg0
+ */
+setExpand : function (
+float 
+)
+{
+},
+
+/**
+ * @method getEndOpacity
+ * @return {unsigned char}
+ */
+getEndOpacity : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method initWithColor
+ * @param {color4b_object} arg0
+ * @param {color4b_object} arg1
+ * @param {float} arg2
+ * @param {vec2_object} arg3
+ * @param {float} arg4
+ * @return {bool}
+ */
+initWithColor : function (
+color4b, 
+color4b, 
+float, 
+vec2, 
+float 
+)
+{
+    return false;
+},
+
+/**
+ * @method setEndColor
+* @param {color4b_object|color3b_object} color4b
+*/
+setEndColor : function(
+color3b 
+)
+{
+},
+
+/**
+ * @method getEndColor3B
+ * @return {color3b_object}
+ */
+getEndColor3B : function (
+)
+{
+    return cc.Color3B;
+},
+
+/**
+ * @method setRadius
+ * @param {float} arg0
+ */
+setRadius : function (
+float 
+)
+{
+},
+
+/**
+ * @method setStartColor
+* @param {color4b_object|color3b_object} color4b
+*/
+setStartColor : function(
+color3b 
+)
+{
+},
+
+/**
+ * @method getExpand
+ * @return {float}
+ */
+getExpand : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setBlendFunc
+ * @param {cc.BlendFunc} arg0
+ */
+setBlendFunc : function (
+blendfunc 
+)
+{
+},
+
+/**
+ * @method getRadius
+ * @return {float}
+ */
+getRadius : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method create
+* @param {color4b_object} color4b
+* @param {color4b_object} color4b
+* @param {float} float
+* @param {vec2_object} vec2
+* @param {float} float
+* @return {cc.LayerRadialGradient|cc.LayerRadialGradient}
+*/
+create : function(
+color4b,
+color4b,
+float,
+vec2,
+float 
+)
+{
+    return cc.LayerRadialGradient;
+},
+
+/**
+ * @method LayerRadialGradient
+ * @constructor
+ */
+LayerRadialGradient : function (
 )
 {
 },
@@ -16182,6 +16606,16 @@ int
 },
 
 /**
+ * @method getAllParticleSystems
+ * @return {Array}
+ */
+getAllParticleSystems : function (
+)
+{
+    return new Array();
+},
+
+/**
  * @method ParticleSystem
  * @constructor
  */
@@ -17340,6 +17774,16 @@ rect
 },
 
 /**
+ * @method isStretchEnabled
+ * @return {bool}
+ */
+isStretchEnabled : function (
+)
+{
+    return false;
+},
+
+/**
  * @method setTextureRect
 * @param {rect_object|rect_object} rect
 * @param {bool} bool
@@ -17363,6 +17807,16 @@ str
 )
 {
     return false;
+},
+
+/**
+ * @method setStretchEnabled
+ * @param {bool} arg0
+ */
+setStretchEnabled : function (
+bool 
+)
+{
 },
 
 /**
@@ -21540,12 +21994,14 @@ removeAllTextures : function (
 
 /**
  * @method addImageAsync
- * @param {String} arg0
- * @param {function} arg1
- */
-addImageAsync : function (
-str, 
-func 
+* @param {String|String} str
+* @param {function|function} func
+* @param {String} str
+*/
+addImageAsync : function(
+str,
+func,
+str 
 )
 {
 },
@@ -21664,6 +22120,16 @@ setETC1AlphaFileSuffix : function (
 str 
 )
 {
+},
+
+/**
+ * @method getETC1AlphaFileSuffix
+ * @return {String}
+ */
+getETC1AlphaFileSuffix : function (
+)
+{
+    return ;
 },
 
 /**

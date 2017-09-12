@@ -9,6 +9,16 @@ var ccui = ccui || {};
 ccui.WebView = {
 
 /**
+ * @method setOpacityWebView
+ * @param {float} arg0
+ */
+setOpacityWebView : function (
+float 
+)
+{
+},
+
+/**
  * @method canGoBack
  * @return {bool}
  */
@@ -78,10 +88,12 @@ str
 
 /**
  * @method loadURL
- * @param {String} arg0
- */
-loadURL : function (
-str 
+* @param {String|String} str
+* @param {bool} bool
+*/
+loadURL : function(
+str,
+bool 
 )
 {
 },
@@ -102,6 +114,14 @@ bool
  */
 evaluateJS : function (
 str 
+)
+{
+},
+
+/**
+ * @method setBackgroundTransparent
+ */
+setBackgroundTransparent : function (
 )
 {
 },
@@ -142,6 +162,16 @@ getOnShouldStartLoading : function (
 stopLoading : function (
 )
 {
+},
+
+/**
+ * @method getOpacityWebView
+ * @return {float}
+ */
+getOpacityWebView : function (
+)
+{
+    return 0;
 },
 
 /**

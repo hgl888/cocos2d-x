@@ -17,7 +17,7 @@
 -- js NA
 -- @function [parent=#Director] pushProjectionMatrix 
 -- @param self
--- @param #unsigned int index
+-- @param #unsigned long index
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------
@@ -26,7 +26,7 @@
 -- js NA
 -- @function [parent=#Director] popProjectionMatrix 
 -- @param self
--- @param #unsigned int index
+-- @param #unsigned long index
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------
@@ -44,7 +44,7 @@
 -- js NA
 -- @function [parent=#Director] loadProjectionIdentityMatrix 
 -- @param self
--- @param #unsigned int index
+-- @param #unsigned long index
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------
@@ -155,11 +155,13 @@
 -- @return vec2_table#vec2_table ret (return value: vec2_table)
         
 --------------------------------
--- 
--- @function [parent=#Director] mainLoop 
+-- @overload self, float         
+-- @overload self         
+-- @function [parent=#Director] mainLoop
 -- @param self
+-- @param #float dt
 -- @return Director#Director self (return value: cc.Director)
-        
+
 --------------------------------
 --  Enables/disables OpenGL depth test. 
 -- @function [parent=#Director] setDepthTest 
@@ -231,7 +233,7 @@
 -- @function [parent=#Director] multiplyProjectionMatrix 
 -- @param self
 -- @param #mat4_table mat
--- @param #unsigned int index
+-- @param #unsigned long index
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------
@@ -472,7 +474,7 @@
 -- @function [parent=#Director] loadProjectionMatrix 
 -- @param self
 -- @param #mat4_table mat
--- @param #unsigned int index
+-- @param #unsigned long index
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------
@@ -481,7 +483,7 @@
 -- js NA
 -- @function [parent=#Director] initProjectionMatrixStack 
 -- @param self
--- @param #unsigned int stackCount
+-- @param #unsigned long stackCount
 -- @return Director#Director self (return value: cc.Director)
         
 --------------------------------

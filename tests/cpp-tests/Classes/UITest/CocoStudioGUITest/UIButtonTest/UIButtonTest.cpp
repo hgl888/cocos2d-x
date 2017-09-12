@@ -21,6 +21,9 @@ UIButtonTests::UIButtonTests()
     ADD_TEST_CASE(UIButtonDisableDefaultTest);
     ADD_TEST_CASE(UIButtonCloneTest);
     ADD_TEST_CASE(Issue12249);
+    ADD_TEST_CASE(Issue17116);
+    ADD_TEST_CASE(UIButtonWithPolygonInfo);
+    ADD_TEST_CASE(UIButtonScale9ChangeSpriteFrame);
 }
 
 // UIButtonTest
@@ -437,7 +440,7 @@ bool UIButtonTest_Title::init()
         button->setTitleText("Title Button!");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->setTitleColor(Color3B::YELLOW);
-        CCASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColotr & getTitleColor not match!");
+        CCASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColor & getTitleColor not match!");
         button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
         _uiLayer->addChild(button);
         button->setFlippedX(true);
@@ -1189,3 +1192,85 @@ bool Issue12249::init()
     }
     return false;
 }
+
+// https://github.com/cocos2d/cocos2d-x/issues/17116
+Issue17116::Issue17116()
+{
+}
+
+bool Issue17116::init()
+{
+    if (UIScene::init())
+    {
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+
+        SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/issue_17116.plist");
+        auto button = ui::Button::create();
+        button->loadTextureNormal("buttons/play-big", ui::Widget::TextureResType::PLIST);
+        button->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2));
+        button->setOpacity(100);
+        addChild(button);
+        return true;
+    }
+    return false;
+}
+
+UIButtonWithPolygonInfo::UIButtonWithPolygonInfo()
+{
+}
+
+bool UIButtonWithPolygonInfo::init()
+{
+    if (UIScene::init())
+    {
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        
+        SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/poly_test_textures.plist");
+        auto button = ui::Button::create();
+        button->loadTextureNormal("poly_test/wheel_disc_back.png", ui::Widget::TextureResType::PLIST);
+        button->setPosition(Vec2(visibleSize.width/2 - 100, visibleSize.height/2));
+        button->setScale(0.5);
+        button->setScale9Enabled(true);
+        addChild(button);
+        
+        auto buttonCopy = button->clone();
+        button->setPosition(Vec2(visibleSize.width/2 + 100, visibleSize.height/2));
+        addChild(buttonCopy);
+        
+        return true;
+    }
+    return false;
+}
+
+UIButtonScale9ChangeSpriteFrame::UIButtonScale9ChangeSpriteFrame()
+{
+}
+
+bool UIButtonScale9ChangeSpriteFrame::init()
+{
+    if (UIScene::init())
+    {
+        ImageView* sprite = ImageView::create("Images/blocks.png");
+        sprite->setScale9Enabled(true);
+        sprite->setCapInsets(Rect(32, 32, 32, 32));
+        sprite->setContentSize(Size(96 * 1.5, 96));
+        sprite->setNormalizedPosition(Vec2(0.2, 0.5));
+        this->addChild(sprite);
+        
+        auto button = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
+        button->setScale9Enabled(true);
+        button->setContentSize(Size(100, 50));
+        button->setNormalizedPosition(Vec2(0.6, 0.5));
+        button->setTitleText("Press me");
+        addChild(button);
+        
+        button->addClickEventListener([sprite](Ref* button){
+            sprite->loadTexture("Images/blocks9.png");
+        });
+
+        
+        return true;
+    }
+    return false;
+}
+
