@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2014-2017 Chukong Technologies Inc.
+ Copyright (c) 2014-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
 
@@ -196,7 +197,7 @@ public:
     struct CharUTF8
     {
         std::string _char;
-        bool isAnsi() { return _char.size() == 1; }
+        bool isASCII() const { return _char.size() == 1; }
     };
     typedef std::vector<CharUTF8> CharUTF8Store;
 
@@ -208,12 +209,15 @@ public:
     void replace(const std::string& newStr);
 
     std::string getAsCharSequence() const;
+    std::string getAsCharSequence(std::size_t pos) const;
+    std::string getAsCharSequence(std::size_t pos, std::size_t len) const;
 
     bool deleteChar(std::size_t pos);
     bool insert(std::size_t pos, const std::string& insertStr);
     bool insert(std::size_t pos, const StringUTF8& insertStr);
 
     CharUTF8Store& getString() { return _str; }
+    const CharUTF8Store& getString() const { return _str; }
 
 private:
     CharUTF8Store _str;
