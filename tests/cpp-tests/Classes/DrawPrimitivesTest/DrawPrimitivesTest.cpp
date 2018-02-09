@@ -261,10 +261,12 @@ DrawNodeTest::DrawNodeTest()
         draw->drawDot(Vec2(s.width/2, s.height/2), 10*(10-i), Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
     }
     
+    auto draw2 = DrawNode::create();
+    addChild(draw2, 10);
     // Draw polygons
     Vec2 points[] = { Vec2(s.height/4,0), Vec2(s.width,s.height/5), Vec2(s.width/3*2,s.height) };
-    draw->drawPolygon(points, sizeof(points)/sizeof(points[0]), Color4F(1,0,0,0.5), 4, Color4F(0,0,1,0.5));
-    
+    draw2->drawPolygon(points, sizeof(points)/sizeof(points[0]), Color4F(1,0,0,0.5), 4, Color4F(0,0,1,0.5));
+
     // star poly (triggers buggs)
     {
         const float o=80;
@@ -276,10 +278,10 @@ DrawNodeTest::DrawNodeTest()
             //              {o +w, o+w*2+h}, {o,o+w*2},                 // top spike
             //              {o -h, o+w}, {o,o},                         // left spike
         };
-        
-        draw->drawPolygon(star, sizeof(star)/sizeof(star[0]), Color4F(1,0,0,0.5), 1, Color4F(0,0,1,1));
+
+        draw2->drawPolygon(star, sizeof(star)/sizeof(star[0]), Color4F(1,0,0,0.5), 1, Color4F(0,0,1,1));
     }
-    
+
     // star poly (doesn't trigger bug... order is important un tesselation is supported.
     {
         const float o=180;
@@ -291,40 +293,43 @@ DrawNodeTest::DrawNodeTest()
             Vec2(o +w, o+w*2+h), Vec2(o,o+w*2),               // top spike
             Vec2(o -h, o+w),                                     // left spike
         };
-        
-        draw->drawPolygon(star, sizeof(star)/sizeof(star[0]), Color4F(1,0,0,0.5), 1, Color4F(0,0,1,1));
+
+        draw2->drawPolygon(star, sizeof(star)/sizeof(star[0]), Color4F(1,0,0,0.5), 1, Color4F(0,0,1,1));
     }
-    
+
     //draw a solid polygon
     Vec2 vertices3[] = {Vec2(60,160), Vec2(70,190), Vec2(100,190), Vec2(90,160)};
-    draw->drawSolidPoly( vertices3, 4, Color4F(1,1,0,1) );
-    
+    draw2->drawSolidPoly( vertices3, 4, Color4F(1,1,0,1) );
+
     //draw a solid rectangle
-    draw->drawSolidRect(Vec2(10,10), Vec2(20,20), Color4F(1,1,0,1));
-    
+    draw2->drawSolidRect(Vec2(10,10), Vec2(20,20), Color4F(1,1,0,1));
+
     //draw a solid circle
-    draw->drawSolidCircle( VisibleRect::center() + Vec2(140,0), 40, CC_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f, Color4F(0.0, 1.0, 0.0, 1.0));
-    
+    draw2->drawSolidCircle( VisibleRect::center() + Vec2(140,0), 40, CC_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f, Color4F(0.0, 1.0, 0.0, 1.0));
+
     // Draw segment
-    draw->drawSegment(Vec2(20,s.height), Vec2(20,s.height/2), 10, Color4F(0, 1, 0, 1));
-    
-    draw->drawSegment(Vec2(10,s.height/2), Vec2(s.width/2, s.height/2), 40, Color4F(1, 0, 1, 0.5));
+    draw2->drawSegment(Vec2(20,s.height), Vec2(20,s.height/2), 10, Color4F(0, 1, 0, 1));
+
+    draw2->drawSegment(Vec2(10,s.height/2), Vec2(s.width/2, s.height/2), 40, Color4F(1, 0, 1, 0.5));
 
     // Draw triangle
-    draw->drawTriangle(Vec2(10, 10), Vec2(70, 30), Vec2(100, 140), Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5));
-    
+    draw2->drawTriangle(Vec2(10, 10), Vec2(70, 30), Vec2(100, 140), Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5));
+
     for (int i = 0; i < 100; i++) {
-        draw->drawPoint(Vec2(i*7, 5), (float)i/5+1, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+        draw2->drawPoint(Vec2(i*7, 5), (float)i/5+1, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
     }
 
-    auto draw1 = DrawNode::create();
-    this->addChild(draw1, 10);
-    draw1->setLineWidth(4);
-    draw1->drawLine(Vec2(0, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
-    draw1->drawLine(Vec2(0, 0), Vec2(s.width, s.height - 20), Color4F::YELLOW);
-
-    draw->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2),FadeOut::create(1.2), NULL)));
-    draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2),FadeOut::create(1.2), NULL)));
+    draw->setVisible(false);
+//    draw2->setVisible(false);
+//
+//    auto draw1 = DrawNode::create();
+//    this->addChild(draw1, 10);
+//    draw1->setLineWidth(4);
+//    draw1->drawLine(Vec2(0, s.height), Vec2(s.width, s.height - 20), Color4F::YELLOW);
+//    draw1->drawLine(Vec2(0, 0), Vec2(s.width, s.height - 20), Color4F::YELLOW);
+//
+//    draw->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2),FadeOut::create(1.2), NULL)));
+//    draw1->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2),FadeOut::create(1.2), NULL)));
 }
 
 string DrawNodeTest::title() const
